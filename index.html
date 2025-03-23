@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamesCulutre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+   
+    
+    <style>
+
+
+
+#controlesNave {
+           
+          
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+          
+            width: 250px;
+        }
+
+        #controlesNave h3 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Estilos para cada control */
+        .control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .control:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .control .tecla {
+            font-weight: bold;
+            font-size: 16px;
+            color: #ffcc00;
+        }
+
+        .control .accion {
+            font-size: 14px;
+            color: #ddd;
+            text-align: right;
+        }
+
+
+
+
+
+
+
+
+
+
+        /* Estilos personalizados para las barras de scroll */
+        ::-webkit-scrollbar {
+            width: 14px;
+            height: 14px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent; /* Fondo transparente */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #4ade80, #22c55e);
+            border-radius: 10px;
+            border: 3px solid transparent; /* Borde transparente */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: transparent; /* Fondo transparente */
+        }
+
+    
+
+        /* Gradiente para el fondo */
+        .retro-bg {
+            background: linear-gradient(135deg, #002200, #004400, #006600); /* Gradiente verde oscuro */
+        }
+
+        /* Estilo para el contenedor del renderizador */
+        #renderer {
+            width: 100%;
+            height: 100vh; /* Ocupa toda la altura de la ventana */
+            position: relative;
+        }
+
+       /* Animación de movimiento para todas las palabras */
+.word-animation {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Estilo retro-text (solo para palabras que no son "RPG DE ACCIÓN") */
+.retro-text {
+    font-family: 'Press Start 2P', cursive; /* Fuente retro */
+    color: #7ef71b; /* Color retro */
+    text-shadow: 2px 2px 0 #807209; /* Sombra retro */
+}
+.rojo-oscuro {
+            color: #9f1f18; /* rojo oscuro */
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #000000; /* Sombra retro */
+        }
+.dorado {
+    
+    text-shadow: 2px 2px 0 #28220b; /* Sombra retro */
+    color: #9e8572; /* Color retro */
+    font-size: 2rem;
+    font-weight: bold;
+}
+.dorado-claro {
+    text-shadow: 0 0 5px #23260e, 0 0 10px #000000; 
+  
+    color: #d0c4a5; /* Color retro */
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+        /* Estilos para el contenedor #letrero */
+        #letrero {
+            width: 80vw;
+            height: 60vh;
+            margin: 10vh auto; /* Centrar el contenedor */
+            border: 2px solid #00ff00; /* Borde para visualizar el contenedor */
+        }
+
+        /* Estilos para el contenedor #canvas3d */
+        #canvas3d {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+
+        /* Estilo personalizado para el brillo en la columna de ejemplo */
+.custom-glow {
+    text-shadow: 0 0 5px #ddff00, 0 0 10px #ffffff; /* Efecto de brillo verdoso */
+}
+/* Estilo para efecto flotante */
+.floating-effect {
+    box-shadow: 15px 30px 20px rgba(0, 0, 0, 0.5); /* Sombra con desplazamiento, desenfoque y color */
+}
+
+
+#loadingScreen {
+    transition: opacity 0.5s ease-out;
+}
+
+#progressBar {
+    transition: width 0.3s ease-out;
+}
+
+    </style>
+</head>
+
+<body class="custom-cursor  items-center  min-h-screen bg-[url('assets/fondo_espacio.jpg')] bg-cover overflow-hidden-x">
+
+    <!-- Cabecero -->
+    <div class="relative h-[25vh] bg-gradient-to-br from-indigo-600 to-pink-600 border-4 border-l-0 border-t-0 border-r-0 border-green-500">
+        <!-- Canvas dentro del cabecero -->
+        <div id="canvas3d" class="w-full  h-[16vh] flex isolate">
+    
+        </div>
+
+        <!-- Contenido del cabecero (logo gitarorio) -->
+        <div class="relative z-10 flex h-full w-full   items-center pointer-events-none  ">
+            <div id="logoWeb" class=" min-w-full flex flex-1 flex-col w-full h-full  mix-blend-multiply">
+                <canvas class="h-full w-full" id="canvasLogoWeb"></canvas>
+             
+            
+            </div>
+
+            
+        </div>
+    </div>
+        <!-- Barra de acessos rápidos -->
+        <div id="botones" class ="flex-1 flex  bg-gradient-to-t from-black from-0% via-black via-10% to-pink-700/50 to-100%  flex md:w-full   border-l-0 border-r-0  justify-center items-center h-[15vh] sm: md:gap-12 md:gap-32  p-1  border-bottom-8 rounded-br-lg rounded-bl-lg place-self-center ">
+      
+
+        </div>
+   
+
+    <!-- Contenedor con el texto que se animará -->
+    <div  class="flex  w-2/3  place-self-center items-center flex-col retro-text bg-cover  ">
+    
+        <div class="  w-full  flex justify-center bg-gradient-to-t from-black from-0% via-black via-10% to-pink-700/50 to-100%  bg-opacity-10  p-2">
+        <div class="  w-full text-green-500 h-[45vh] opactiy-50 bg-[url('assets/asteroidSimulatorLogo111.png')] bg-center  bg-contain  bg-no-repeat  "> </div>
+        </div>
+
+        <div id="container" class=" w-auto p-4 text-center border-4 bg-[url('assets/fondo_negro.jpg')] bg-cover  mt-4 mb-16">
+
+
+    
+            <p >NUEVA VERSION</p> 
+
+            <p >YA DISPONIBLE</p>
+    
+            
+             <p class="exocet-font  text-[0.7rem] md:text-[1.1rem] rojo-oscuro ">RPG DE ACCIÓN</p>
+        
+        
+    
+            </div>
+            <button  id="JUGARAHORA" class=" w-2/3 h-32  text-center border-4 mt-8 bg-[url('assets/fondo_negro.jpg')] hover:brightness-200 bg-cover mb-16">
+                <a href="#AsteroidSimulator">JUGAR AHORA</a>
+
+               
+            </button>
+                
+            <div class="  items-center flex justify-center h-24 border-4 bg-[url('assets/fondo_negro.jpg')] bg-cover mb-8 mt-8  mx-4 md:mx-0 p-2">
+                <p class=" text-auto break-normal   mx-4">¿ ACABAS DE LLEGAR A ASTEROIDS SIMULATOR ?</p>
+            <div class="flex  h-24  place-self-end text-center py-8 justify-center align-center exocet-font text-2xl  h-full w-24 bg-green-500/10 border-2  border-transparent hover:border-yellow-600/10 hover:brightness-200 rounded-xl  ml-4">
+            <a href="#Principantes"> ↓</a>
+        </div>
+        
+        </div>  
+
+        
+    </div>
+
+
+
+
+    <!-- Contenedor principal -->
+  <div class=" bg-repeat bg-[url('assets/fondo_mosaico.jpg')] pb-64">
+    <div class="bg-gradient-to-t from-black from-0% via-black via-10% to-transparent to-100% pb-24">
+        <div class="flex-col w-1/2 md:w-[30%] h-[50vh] place-self-start text-4x1 md:place-self-end   mx-[8%]">
+
+            <p class="  text-[1.4rem] md:text-[1.8rem] text-red-500 pt-12  exocet-font  ">EL UNIVERSO TE SALUDA</p>
+            <p class= "text-white text-sm md:text-xl opacity-60">Descubre la aclamada franquicia que ha definido el género RPG.
+                 La contienda entre los Bots y la Confederación Galáctica arrecia, pero también tienes más posibilidades para luchar y que venza el bien.</p>
+        </div>
+
+
+        <div class="flex  flex-col md:items-center bg-gradient-to-t from-black from-0% via-red-900/20 via-50% to-red-700/30 to-100% bg-opacity-60 pt-24  pb-32  text-center antialiased md:subpixel-antialiased">
+            
+            <p class=" text-[0.9rem] md:text-[1.5rem]  dorado exocet-font leading-[2.2] break-normal opacity-100 ">NOVEDADES DE ASTEROID SIMULATOR</p>
+                <p class=" text-[1.1rem] md:text-[1.5rem] md:text-[2rem] retro-text dorado-claro opacity-100  w-max-[50vw]">ÚLTIMAS ACTUALIZACIONES</p>
+         
+         
+                <div class=" w-full jusitfy-center flex flex-col md:flex-row mt-8 md:mt-12  gap-12 md:gap-24 ">
+            <div class="flex-1 place-self-top  exocet-font mx-8 md:mr-0  ">
+                <p class=" text-[0.7rem] md:text-[0.9rem]  dorado leading-[2.2] break-normal opacity-100 ">YA DISPONIBLE</p>
+            <div class="text-center dorado-claro text-[0.7rem] md:text-[1.7rem]  flex-1"> ASTEROID SIMULATOR® ORIGINS™ </div>
+            <p class= " font-sans text-white text-sm md:text-xl opacity-60">  El siguiente capítulo de Asteroid Simulator® llega con Origins™, la primera expansión del aclamado RPG de acción espacial. Llega a lo más profundo de la galaxia con la nueva nave, la Explorator. Expande el mapa para viajar a la nueva región galáctica en busca de nuevos desafíos y misterios que descubrir. Recluta mercenarios, equípate con armas de plasma, usa el buscador de grupos y forma equipo para arrasar con las ciudadelas Bot y mucho más. Echa ya el guante a la Ultimate Edition de Origins y desbloquea recompensas en el juego* al instante.
+
+            <br>  <br>* Requiere el juego base de Asteroid Simulator.
+            </p>
+        </div>
+            <div class=" flex-col gap-8 items-center flex-1 exocet-font mx-8 md:mr-8 md:ml-0  "> 
+                
+               
+                    <img src="assets/fotoAsteroides.png" alt="" class=" aspect-video shadow-xl  rounded-sm  ">
+          
+                    <div class="text-center dorado dorado text-[0.7rem] md:text-[0.9rem] mt-4">Nuevos modelos y escenarios</div>
+                <div class="text-center dorado-claro text-[0.7rem] md:text-[1.7rem]  ">PASEO ESPACIAL YA DISPONIBLE</div>
+                <p class= " font-sans text-white text-sm md:text-xl opacity-60"> 
+                    Ya puedes sumergirte en la región del planeta enano Delta Nova-IV! 
+                     Explora su peligroso cinturón de asteroides con la nueva iluminación Origins™ y prepárate para la futura implementación de minería espacial.
+                    En este pequeño sistema, encontrarás los minerales más preciados y exóticos hasta la fecha, pero cuidado con los piratas y las expediciones Dron ! 
+                    
+                    </p>
+                 
+          
+
+         </div>
+                
+         
+            
+    
+       
+    </div> 
+</div>
+ <!-- Principantes y quiz-->
+<div id="Principantes" class="place-self-center flex-col w-full">
+    <div class="m-4 text-sm  md:text-[0.9rem] text-center w-[90%] dorado  mt-4">Aquí encontrarás las características de este videojuego y podrás resolver una serie de preguntas acerca del universo Asteroid Simulator®</div>
+    <div class="text-center dorado-claro text-[0.7rem] md:text-[1.7rem]  ">COMPRA YA TU EDICIÓN FAVORITA</div>
+    <div class="container mx-auto p-8">
+        <!-- Título -->
+       
+
+     
+        <div id="ListaCaracteristicas" class="place-self-center p-4 "></div>
+
+
+</div>
+  <!-- QUIZ-->
+<div class="flex place-self-center justify-center h-[75vh] retro-text w-2/3 ">
+    <!-- Pantalla de inicio -->
+   
+
+    <div id="pantalla-inicio" class="bg-white p-8 rounded-lg shadow-lg  h-full   text-center bg-cover bg-center bg-no-repeat bg-[url('assets/AgujeroVerde.jpg')] fade-in mb-64 ">
+        <div class="text-sm md:text-3xl font-bold bg-transparent mb-6">Bienvenido al Quiz
+          
+        </div>
+
+        <p class="text-sm mb-8">¿Estás listo para poner a prueba tus conocimientos?</p>
+        <button id="boton-inicio" class="flex place-self-end px-6 py-3 bg-lime-500 text-white rounded hover:bg-teal-600 transition duration-300 scale-up">Comenzar Quiz</button>
+    </div>
+
+     <!-- Contenedor del quiz (inicialmente oculto) -->
+     <div id="contenedor-quiz" class="flex-col flex hidden w-full h-full text-center text-auto retro-bg rounded-xl items-center justify-center mb-64 p-4 ">
+        <!-- Barra de progreso -->
+        <div class="w-full  bg-purple-900 rounded-full h-2.5 mb-6 ">
+            <div id="barra-progreso" class=" bg-gray-200 bg-gradient-to-r from-teal-300/50 to-red-700 w-full h-2.5 opacity-50 rounded-full" style="width: 0%;"></div>
+        </div>
+        <h1 id="pregunta" class="  h-1/4 p-4 text-xl md:text-2xl font-bold mb-6"></h1>
+        <div id="respuestas" class="  w-[60%] space-y-4"></div>
+        <div class="  flex flex-col md:flex-row gap-4 justify-center w-[90%] mt-8">
+            <button id="boton-anterior" class="order-2 md:order-1 px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition duration-300">Anterior</button>
+            <span id="contador-preguntas" class=" order-1 md:order-2 place-self-top text-sm md:text-md dorado-claro"></span> <!-- Nuevo elemento para el contador -->
+            
+            <button id="boton-siguiente" class="order-3   px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition duration-300">Siguiente</button>
+        </div>
+    </div>
+        <!-- Contenedor de resultados (inicialmente oculto) -->
+        <div id="contenedor-resultados" class="hidden flex flex-col  items-center mb-64">
+            <h2 class="text-2xl font-bold mb-4">Has finalizado el quiz</h2>
+            
+            <p id="resultados" class="text-xl mb-6"></p>
+            <div class="flex h-[55%] w-full h-24 place-self-center justify-center items-center">
+                <button id="boton-reintentar" class="w-auto px-6 py-3 bg-center bg-cover bg-[url('assets/fondoBarraLateral.jpg')] rounded hover:brightness-200 hover:text-2xl transition-all duration-300 transform origin-center hover:scale-105 hover:shadow-2xl rounded-full border-4 overflow-hidden border-green-500 hover:border-green-400">
+                    Reintentar Quiz
+                    <div class="absolute w-full inset-0 bg-red-900 opacity-0 hover:opacity-50 transition-opacity duration-300 -z-10"></div>
+                </button>
+            </div>
+           
+            </div>
+        </div>
+           
+    </div>
+
+
+            <div id="ContenedorPrincipal" class="  fixed top-[28vh] r-0 flex w-full h-[65vh] transform transition-transform duration-[1000ms] ease-in-out ">
+                <!-- Contenido del contenedor -->
+                <section id="sectionPrincipal" class="h-auto overflow-y-auto pl-8 pr-4">
+                        <div id="columnaflexible" class="h-full w-full overflow-x-auto overflow-y-auto border-4 mx-auto border-green-500 backdrop-brightness-50  backdrop-blur-xs xl backdrop-hue-rotate-15 bg-blue-500/50 rounded-xl ">
+                            <div class=" subpixel-antialiased font-extrabold font-stretch-condensed  custom-glow 
+                            border-2 text-blue-800/100 border-blue-500 text-nowrap p-4 text-sm md:text-xl overflow-hidden  m-4 mt-8 rounded-xl border-green-600 border-4">
+                                CONTROLES DE VUELO
+                            </div>
+                            <div class="flex-col h-auto mx-auto  ">
+                                <div class=" border-4 h-32 border-green-500 m-2  overflow-x-auto overflow-y-auto
+                                text-xl  text-center text-pretty exocet-font
+                                backdrop-blur-xl backdrop-hue-rotate-60 bg-blue-500/20    rounded-xl">
+                                    *+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*. *+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.
+                                    *+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.
+                                    *.*+*.*+*.*+*.*+*.*+*.*+*.*+
+                                    .*+*.*+.*+*.*+*EN CONSTRUCCIÓN*+*.*+.*+*.*+
+                                    *+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.
+                                    *+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*. *+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.
+                                    *+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.*+*.
+
+                                </div>
+                                <div class="flex-1 max-h-full  border-4 font-extrabold border-green-500 bg-black/10 m-2 p-2 overflow-y-auto overflow-x-hidden text-2xl text-indigo-500 retro-text rounded-xl  ">
+                                    <h1>LISTA DE COMANDOS</h1>
+                                </div>
+
+                                <div id="controlesNave "class="w-full dorado bg-black/20 p-2 retro-text">
+                                    <h3>Controles de la Nave</h3>
+                                    <ul id="listaControles"></ul>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </section>
+                        <!-- Botón resizable -->
+                        <button id="BotonResizable" class="flex z-[500] h-24   mx-4 retro-bg transform text-white flex items-center justify-center transition-all duration-200 ease-in-out cursor-pointer backdrop-blur-xl backdrop-hue-rotate-60 opacity-90 rounded-full hover:brightness-110 border-gray-100/70  border-2" aria-label="Redimensionar">    
+                                                <span class="flex text-xs retro-text    place-self-center  text-black/90 font-bold mx-2 ">Controles</span>
+                                                
+                    </button>
+              </div>
+                                                
+     
+
+
+
+
+ 
+
+      
+ 
+   
+</div>
+
+
+    </div>
+        <div class="h-[100vh] flex w-full relative" id="AsteroidSimulator">
+        <div id="loadingScreen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 80%; height: 30px; background: #333; border: 2px solid white;">
+                <div id="progressBar" style="width: 0%; height: 100%; background: lime;"></div>
+            </div>
+        </div>
+        </div>
+      
+<!-- Scripts modulares -->
+
+<script src="letras.js"></script>
+<script src="quiz.js"></script>
+<script type="module" src="loader.js"></script>
+<script type="module" src="planetaCrater.js"></script>
+<script type="module" src="camara.js"></script>
+<script type="module" src="infoPanel.js"></script>
+<script type="module" src="instancer.js"></script>
+<script type="module" src="main.js"></script>
+
+
+<script type="module" src="logoWeb.js"></script>
+<!-- Scripts no modulares -->
+
+<script src="scripts.js"></script>
+<script type="module" src="cubos.js"></script>
+
+
+</body>
+
+</html>

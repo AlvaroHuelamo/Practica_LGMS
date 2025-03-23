@@ -1,0 +1,82 @@
+.custom-cursor{
+    cursor: url('assets/cursorImagen.cur') 32 5, auto;
+}
+
+    @font-face {
+        font-family: 'Exocet Medium';
+        src: url('fonts/ExocetMedium.eot'); /* IE9 Compat Modes */
+        src: url('fonts/ExocetMedium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+          
+             url('fonts/ExocetMedium.woff') format('woff'), /* Modern Browsers */
+             url('fonts/ExocetMedium.ttf') format('truetype'); /* Safari, Android, iOS */
+        font-weight: normal;
+        font-style: normal;
+    }
+    .exocet-font{
+        font-family: 'Exocet Medium' , sans-serif ;
+        text-decoration: wavy;
+       
+    }
+
+   
+/* Estilos para la barra lateral en pantallas pequeñas */
+@media (max-width: 767px) {
+    #sidebar {
+        width: 20%; /* Ocupa 1/5 de la pantalla */
+    }
+}
+
+/* styles.css */
+.transition-all {
+    transition: all 0.3s ease-in-out;
+  }
+  
+
+  
+  .flex-grow {
+    flex-grow: 1;
+  }
+  
+  .ml-64 {
+    margin-left: 16rem; 
+  }
+  
+  .ml-0 {
+    margin-left: 0;
+  }
+
+
+  #BotonResizable {
+    display: block !important;
+    pointer-events: all !important;
+    z-index: 9999 !important;
+}
+
+
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.scale-up {
+  animation: scaleUp 0.3s;
+}
+@keyframes scaleUp {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+
+
+
+
+
+
+
+
+
+  .font-btse-ps2 {
+    font-family: 'Press Start 2P', sans-serif;
+}
